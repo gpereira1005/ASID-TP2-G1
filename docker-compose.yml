@@ -1,0 +1,106 @@
+version: '3.8'
+
+services:
+  sqldatabase:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - asidg1
+  service-registry:
+    build:
+      context: ./registry-service
+    container_name: service-registry
+    ports:
+      - "8761:8761"
+    networks:
+      - asidg1
+  student-service:
+    build:
+      context: ./student-service
+    environment:
+      MYSQL_HOST: sqldatabase
+      MYSQL_PORT: 3306
+      MYSQL_DB_NAME: StudentService_db
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+    networks:
+      - asidg1
+  club-service:
+    build:
+      context: ./club-service
+    environment:
+      MYSQL_HOST: sqldatabase
+      MYSQL_PORT: 3306
+      MYSQL_DB_NAME: ClubService_db
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+    networks:
+      - asidg1
+  employee-service:
+    build:
+      context: ./employee-service
+    environment:
+      MYSQL_HOST: sqldatabase
+      MYSQL_PORT: 3306
+      MYSQL_DB_NAME: EmployeeService_db
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+    networks:
+      - asidg1
+  parent-service:
+    build:
+      context: ./parent-service
+    environment:
+      MYSQL_HOST: sqldatabase
+      MYSQL_PORT: 3306
+      MYSQL_DB_NAME: ParentService_db
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+    networks:
+      - asidg1
+  orchestrator-service:
+    build:
+      context: ./orchestrator-service
+    networks:
+      - asidg1
+  teacher-service:
+    build:
+      context: ./teacher-service
+    environment:
+      MYSQL_HOST: sqldatabase
+      MYSQL_PORT: 3306
+      MYSQL_DB_NAME: TeacherService_db
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+    networks:
+      - asidg1
+  town-service:
+    build:
+      context: ./town-service
+    environment:
+      MYSQL_HOST: sqldatabase
+      MYSQL_PORT: 3306
+      MYSQL_DB_NAME: TownService_db
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+    networks:
+      - asidg1
+  gateway-service:
+    build:
+      context: ./gateway
+    container_name: gateway-service
+    ports:
+      - "8080:8080"
+    networks:
+      - asidg1
+
+volumes:
+  mysql-data:
+
+networks:
+  asidg1:

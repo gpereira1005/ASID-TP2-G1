@@ -1,0 +1,48 @@
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://service-registry:8761/eureka/
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: students-route
+          uri: lb://student-service
+          predicates:
+            - Path=/students/**
+            - Method=GET
+        - id: parents-route
+          uri: lb://parent-service
+          predicates:
+            - Path=/parents/**
+            - Method=GET
+        - id: clubs-route
+          uri: lb://club-service
+          predicates:
+            - Path=/clubs/**
+            - Method=GET
+        - id: employees-route
+          uri: lb://employees-service
+          predicates:
+            - Path=/employees/**
+            - Method=GET
+        - id: teacher-route
+          uri: lb://teacher-service
+          predicates:
+            - Path=/teachers/**
+            - Method=GET
+        - id: town-route
+          uri: lb://town-service
+          predicates:
+            - Path=/towns/**
+            - Method=GET
+        - id: orchestrator-route
+          uri: lb://orchestrator-service
+          predicates:
+            - Path=/api/**
+            - Method=GET,POST
+  application:
+    name: APIGateway
+server:
+  port: 8080
